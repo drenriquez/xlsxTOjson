@@ -41,18 +41,28 @@ let funONEa=function(ro) {
     for (let i=1;i<ro.length;++i){
         console.log(ro[i][0]);
         // let nod=0;
-        // let pat="";
+        //let bioCode="TEST";
+        let formValue={};
         if (ro[i][0]){
+           // bioCode=ro[i][1];
             console.log("***");
-            DATASET[ro[0][1].toString()]=ro[i][0]
-            
+            for (let j=1;j<128;++j){
+                console.log(j)
+                formValue[ro[0][j]]=ro[i][j];
+            }
+            //DATASET[ro[0][1].toString()]=ro[i][0]
+            DATASET[ro[i][0].toString()]={
+               
+                form:formValue
+            }
         }
         console.log(DATASET)
     }
     console.log()
 
-    alert('chiamata funONEa')
-    const data = JSON.stringify(ro)
+    //alert('chiamata funONEa')
+    const data = JSON.stringify(DATASET);
+    console.log(data);
     const blob = new Blob([data], {type: 'text/plain'})
     const e = document.createEvent('MouseEvents'),
     a = document.createElement('a');
