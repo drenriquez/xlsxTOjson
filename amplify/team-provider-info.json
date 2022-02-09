@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-xlsxtojson-dev-172218-authRole",
+      "UnauthRoleArn": "arn:aws:iam::191715189381:role/amplify-xlsxtojson-dev-172218-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::191715189381:role/amplify-xlsxtojson-dev-172218-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-xlsxtojson-dev-172218-deployment",
+      "UnauthRoleName": "amplify-xlsxtojson-dev-172218-unauthRole",
+      "StackName": "amplify-xlsxtojson-dev-172218",
+      "StackId": "arn:aws:cloudformation:eu-west-1:191715189381:stack/amplify-xlsxtojson-dev-172218/752f4430-89c4-11ec-b72a-026292def53b",
+      "AmplifyAppId": "d2pivnhqgfsrte"
+    }
+  }
+}

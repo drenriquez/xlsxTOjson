@@ -43,17 +43,23 @@ let funONEa=function(ro) {
         // let nod=0;
         //let bioCode="TEST";
         let formValue={};
+        let examsValue={};
         if (ro[i][0]){
            // bioCode=ro[i][1];
             console.log("***");
             for (let j=1;j<128;++j){
-                console.log(j)
+                //console.log(j)
                 formValue[ro[0][j]]=ro[i][j];
+            }
+            for(let j=128;j<271;++j){
+                examsValue[ro[0][j]]=ro[i][j];
+
             }
             //DATASET[ro[0][1].toString()]=ro[i][0]
             DATASET[ro[i][0].toString()]={
                
-                form:formValue
+                form:formValue,
+                exams:examsValue
             }
         }
         console.log(DATASET)
