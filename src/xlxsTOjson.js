@@ -44,6 +44,7 @@ let funONEa=function(ro) {
         //let bioCode="TEST";
         let formValue={};
         let examsValue={};
+        let listExams=[];
         if (ro[i][0]){
            // bioCode=ro[i][1];
             console.log("***");
@@ -55,11 +56,12 @@ let funONEa=function(ro) {
                 examsValue[ro[0][j]]=ro[i][j];
 
             }
+            listExams.push(examsValue);
             //DATASET[ro[0][1].toString()]=ro[i][0]
             DATASET[ro[i][0].toString()]={
                
                 form:formValue,
-                exams:examsValue
+                exams:listExams
             }
         }
         console.log(DATASET)
@@ -83,3 +85,9 @@ let funONEa=function(ro) {
 
 //module.exports.funONE=funONE
 export default funONEa; funONE; funONE2
+/*pretty printing
+json
+serializer json-
+https://stackoverflow.com/questions/4810841/pretty-print-json-using-javascript
+
+*/
