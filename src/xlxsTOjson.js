@@ -38,14 +38,18 @@ let funONE=function (dict){
 let funONEa=function(ro) {
     let DATASET={};
     console.log(ro.length);
+    let numberExams=0;
+    let cont=0;
     for (let i=1;i<ro.length;++i){
         console.log(ro[i][0]);
         // let nod=0;
         //let bioCode="TEST";
+        
         let formValue={};
         let examsValue={};
-        let listExams=[];
+        let listExams=[];        
         if (ro[i][0]){
+            cont=0;
            // bioCode=ro[i][1];
             console.log("***");
             for (let j=1;j<128;++j){
@@ -53,10 +57,11 @@ let funONEa=function(ro) {
                 formValue[ro[0][j]]=ro[i][j];
             }
             for(let j=128;j<271;++j){
-                examsValue[ro[0][j]]=ro[i][j];
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
 
             }
             listExams.push(examsValue);
+            console.log(examsValue)
             //DATASET[ro[0][1].toString()]=ro[i][0]
             DATASET[ro[i][0].toString()]={
                
@@ -64,13 +69,24 @@ let funONEa=function(ro) {
                 exams:listExams
             }
         }
+        else if (!ro[i][0] && (ro[i][180]||ro[i][201])) {
+            ++cont;
+            console.log(cont)
+            console.log(i)
+            console.log(DATASET[ro[i-cont][0].toString()]["exams"])
+            for(let j=128;j<271;++j){
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
+            }
+            DATASET[ro[i-cont][0].toString()]["exams"].push(examsValue)
+            
+        }
         console.log(DATASET)
     }
-    console.log()
+   
 
     //alert('chiamata funONEa')
     const data = JSON.stringify(DATASET);
-    console.log(data);
+    //console.log(data);
     const blob = new Blob([data], {type: 'text/plain'})
     const e = document.createEvent('MouseEvents'),
     a = document.createElement('a');
