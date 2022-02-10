@@ -85,8 +85,8 @@ let funONEa=function(ro) {
    
 
     //alert('chiamata funONEa')
-    const data = JSON.stringify(DATASET);
-    //console.log(data);
+    const data = JSON.stringify(DATASET,null,'\t');
+    console.log(data);
     const blob = new Blob([data], {type: 'text/plain'})
     const e = document.createEvent('MouseEvents'),
     a = document.createElement('a');
