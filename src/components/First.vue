@@ -5,8 +5,8 @@
       <strong> Create a JSON file from XLSX</strong>     
     </p>
     <br><br><br>
-    <b-form-group label="  " label-cols-sm="2" label-size="lg">
-     <b-form-file
+    <b-form-group   label="  " label-cols-sm="2" label-size="lg">
+     <b-form-file class="fileForm"
         v-model="file1" @change="fileCaricato"
         :state="Boolean(file1)"
        plain
@@ -14,7 +14,12 @@
         
       </b-form-group>  
         <br><br><br>
-        <button class="btn btn-primary"  id="sendFromFile" v-show="show" v-on:click="processFile()">send From File</button>
+        <div>
+           <b-spinner style="width: 3rem; height: 3rem;"  v-show="showSpinner"></b-spinner>
+        </div>
+         <b-button  id="sendFromFile" v-show="show" v-on:click="processFile()">send From File</b-button>
+        <br><br><br>
+        <b-button class="btn btn-primary"  id="sendFromFiles" v-show="show" v-on:click="processFiles()">split in many files</b-button>
 
     <!-- <div class="prova">      
         <button type="button" v-on:click="saveFile()">saveFile</button>
@@ -27,7 +32,7 @@
 <script>
 
 import readXlsxFile from 'read-excel-file'
-import funONEa from '../xlxsTOjson'
+import {funONEa,funONEmultiFiles} from '../xlxsTOjson'
 export default {
   name: 'First',
   props: {
@@ -35,6 +40,7 @@ export default {
   },
   data() {
     return {
+      showSpinner:false,
       idPatient: '',
       BoD: '',
       todos: [] ,
@@ -81,7 +87,14 @@ export default {
       //     if(err) console.log('error', err, result);
       // });
     },
+    async processFiles(){
+      
+      funONEmultiFiles(this.ro)
+
+    },
     fileCaricato(event) {
+      this.showSpinner=true;
+      
       this.file = event.target.files ? event.target.files[0] : null;
       readXlsxFile(this.file).then((rows) => {
         console.log(rows[0][1]);
@@ -90,6 +103,7 @@ export default {
         //console.table(rows);
         console.log(rows);
         console.log(rows.length)
+        this.showSpinner=false;
         this.show=true;
         this.ro=rows;
         })         
@@ -145,4 +159,12 @@ input[type="file"]{
   border: 3px;
   background-color: aqua;
 }
+.hello{
+  background-color: rgb(187, 189, 184);
+}
+/* .fileForm{
+  background-color:#ffffff ;
+  border-style:unset;
+} */
+
 </style>

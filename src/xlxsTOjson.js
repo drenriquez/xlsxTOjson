@@ -1,5 +1,9 @@
 //import fs from'fs'
-import path from 'path'
+
+//import path from 'path'
+const { ipcRenderer } = require("electron");
+const path = require('path')
+//const {app} = require("electron")
 //const fs = require('fs');
 
 let funONE2=function (array){
@@ -37,23 +41,17 @@ let funONE=function (dict){
 
 let funONEa=function(ro) {
     let DATASET={};
-    console.log(ro.length);
     let numberExams=0;
     let cont=0;
-    for (let i=1;i<ro.length;++i){
-        console.log(ro[i][0]);
-        // let nod=0;
-        //let bioCode="TEST";
-        
+    for (let i=1;i<ro.length;++i){      
         let formValue={};
         let examsValue={};
         let listExams=[];        
         if (ro[i][0]){
             cont=0;
-           // bioCode=ro[i][1];
-            console.log("***");
+          
             for (let j=1;j<128;++j){
-                //console.log(j)
+                
                 formValue[ro[0][j]]=ro[i][j];
             }
             for(let j=128;j<271;++j){
@@ -61,30 +59,21 @@ let funONEa=function(ro) {
 
             }
             listExams.push(examsValue);
-            console.log(examsValue)
-            //DATASET[ro[0][1].toString()]=ro[i][0]
-            DATASET[ro[i][0].toString()]={
-               
+           
+            DATASET[ro[i][0].toString()]={               
                 form:formValue,
                 exams:listExams
             }
         }
         else if (!ro[i][0] && (ro[i][180]||ro[i][201])) {
             ++cont;
-            console.log(cont)
-            console.log(i)
-            console.log(DATASET[ro[i-cont][0].toString()]["exams"])
             for(let j=128;j<271;++j){
                 examsValue[ro[0][j]]=ro[i+numberExams][j];
             }
             DATASET[ro[i-cont][0].toString()]["exams"].push(examsValue)
             
         }
-        console.log(DATASET)
     }
-   
-
-    //alert('chiamata funONEa')
     const data = JSON.stringify(DATASET,null,'\t');
     console.log(data);
     const blob = new Blob([data], {type: 'text/plain'})
@@ -96,11 +85,51 @@ let funONEa=function(ro) {
     e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     a.dispatchEvent(e);
 }
-
-
+async function funONEmultiFiles(ro) {
+    let DATASET={};
+    let numberExams=0;
+    let cont=0;
+    let listPatients=[];
+    for (let i=1;i<ro.length;++i){       
+        let formValue={};
+        let examsValue={};
+        let listExams=[];        
+        if (ro[i][0]){
+            cont=0;
+            listPatients.push(ro[i][0])           
+            for (let j=1;j<128;++j){             
+                formValue[ro[0][j]]=ro[i][j];
+            }
+            for(let j=128;j<271;++j){
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
+            }
+            listExams.push(examsValue);        
+            //DATASET[ro[0][1].toString()]=ro[i][0]
+            DATASET[ro[i][0].toString()]={              
+                form:formValue,
+                exams:listExams
+            }
+        }
+        else if (!ro[i][0] && (ro[i][180]||ro[i][201])) {
+            ++cont;
+            for(let j=128;j<271;++j){
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
+            }
+            DATASET[ro[i-cont][0].toString()]["exams"].push(examsValue)
+            
+            
+        }
+        
+    }
+    let sendTEST=DATASET;
+    ipcRenderer.send("hello", sendTEST,listPatients);
+    
+    
+   
+}
 
 //module.exports.funONE=funONE
-export default funONEa; funONE; funONE2
+export  {funONEmultiFiles, funONE, funONE2, funONEa}
 /*pretty printing
 json
 serializer json-

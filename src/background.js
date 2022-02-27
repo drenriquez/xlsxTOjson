@@ -1,10 +1,12 @@
 'use strict'
-
-import { app, protocol, BrowserWindow } from 'electron'
+//const fs =require('electron')
+const fs = require('fs');
+const path = require('path')
+import { app, protocol, BrowserWindow, ipcMain } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
+//const { ipcMain} = require('electron');
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
@@ -14,13 +16,14 @@ async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
-    height: 600,
+    height: 650,
     webPreferences: {
       
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      //preload: path.join(__dirname, 'preload.js'),
     }
   })
 
@@ -79,3 +82,32 @@ if (isDevelopment) {
     })
   }
 }
+ipcMain.on('hello', (_event, value,listPatients) => {
+  //console.log(value) // will print value to Node console
+
+
+
+  for (let pat of listPatients){
+    savePatient(value[pat],pat);
+  }
+ 
+//  fs.writeFile(`${app.getPath("downloads")}/PROVA.json`, dataOne, function (err) {
+//   if (err) throw err;               console.log('Results Received');
+// }); 
+
+})
+function savePatient(objJSON,name){
+  const dataOne = JSON.stringify(objJSON,null,'\t');
+  const dirPatients="PATIENTSinBRIC";
+  const pathDownload=path.join(app.getPath("downloads"), dirPatients)
+  //make directory or check if it exist
+  if(!fs.existsSync(pathDownload)){
+    fs.mkdirSync(pathDownload) 
+    };
+  //console.log(dataOne);
+  fs.writeFile(`${pathDownload}/${name.toString()}.json`, dataOne, function (err) {
+  if (err) throw err;          
+}); 
+}
+
+
