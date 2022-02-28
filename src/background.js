@@ -82,13 +82,13 @@ if (isDevelopment) {
     })
   }
 }
-ipcMain.on('hello', (_event, value,listPatients) => {
+ipcMain.on('hello', (_event, value,listPatients,bric=false) => {
   //console.log(value) // will print value to Node console
 
 
 
   for (let pat of listPatients){
-    savePatient(value[pat],pat);
+    savePatient(value[pat],pat,bric);
   }
  
 //  fs.writeFile(`${app.getPath("downloads")}/PROVA.json`, dataOne, function (err) {
@@ -96,9 +96,15 @@ ipcMain.on('hello', (_event, value,listPatients) => {
 // }); 
 
 })
-function savePatient(objJSON,name){
+function savePatient(objJSON,name,bric=false){
   const dataOne = JSON.stringify(objJSON,null,'\t');
-  const dirPatients="PATIENTSinBRIC";
+  let dirPatients='';
+  if(bric){
+    dirPatients="PATIENTSinBRIC";
+  }
+  else{
+    dirPatients="PATIENTSinHSR"
+  }
   const pathDownload=path.join(app.getPath("downloads"), dirPatients)
   //make directory or check if it exist
   if(!fs.existsSync(pathDownload)){

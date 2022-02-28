@@ -18,8 +18,13 @@
            <b-spinner style="width: 3rem; height: 3rem;"  v-show="showSpinner"></b-spinner>
         </div>
          <b-button  id="sendFromFile" v-show="show" v-on:click="processFile()">send From File</b-button>
-        <br><br><br>
+        <br><br>
+        <b-form-checkbox id="checkbox-1" v-model="forBric" name="checkbox-1" value="true" unchecked-value="false" v-show="show" >
+           save for Bric
+        </b-form-checkbox>
+        <br>
         <b-button class="btn btn-primary"  id="sendFromFiles" v-show="show" v-on:click="processFiles()">split in many files</b-button>
+       
 
     <!-- <div class="prova">      
         <button type="button" v-on:click="saveFile()">saveFile</button>
@@ -32,7 +37,7 @@
 <script>
 
 import readXlsxFile from 'read-excel-file'
-import {funONEa,funONEmultiFiles} from '../xlxsTOjson'
+import {funONEa,funONEmultiFiles,funONEmultiFilesBric} from '../xlxsTOjson'
 export default {
   name: 'First',
   props: {
@@ -48,6 +53,7 @@ export default {
       show: false,
       ro:{},
       bu:'',
+      forBric:false,
 
       name: '',
       last: '',
@@ -74,8 +80,7 @@ export default {
 
 
     async processFile(){
-      funONEa(this.ro)
-      
+      funONEa(this.ro);
       // var dict = {"one" : [15, 4.5],
       //   "two" : [34, 3.3],
       //   "three" : [67, 5.0],
@@ -88,9 +93,12 @@ export default {
       // });
     },
     async processFiles(){
-      
-      funONEmultiFiles(this.ro)
-
+      if(this.forBric){
+        funONEmultiFilesBric(this.ro)
+      }
+      else{
+        funONEmultiFiles(this.ro)
+      }
     },
     fileCaricato(event) {
       this.showSpinner=true;

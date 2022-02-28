@@ -98,10 +98,10 @@ async function funONEmultiFiles(ro) {
             cont=0;
             listPatients.push(ro[i][0])           
             for (let j=1;j<128;++j){             
-                formValue[ro[0][j]]=ro[i][j];
+                formValue[ro[0][j]]=ro[i][j];//formValue[ro[0][j]+j]=ro[i][j]
             }
             for(let j=128;j<271;++j){
-                examsValue[ro[0][j]]=ro[i+numberExams][j];
+                examsValue[ro[0][j]]=ro[i+numberExams][j];//examsValue[ro[0][j]+j]=ro[i+numberExams][j]
             }
             listExams.push(examsValue);        
             //DATASET[ro[0][1].toString()]=ro[i][0]
@@ -122,14 +122,54 @@ async function funONEmultiFiles(ro) {
         
     }
     let sendTEST=DATASET;
-    ipcRenderer.send("hello", sendTEST,listPatients);
-    
-    
-   
+    ipcRenderer.send("hello", sendTEST,listPatients,false); 
 }
 
+async function funONEmultiFilesBric(ro) {
+    let DATASET={};
+    let numberExams=0;
+    let cont=0;
+    let listPatients=[];
+    for (let i=1;i<ro.length;++i){       
+        let formValue={};
+        let examsValue={};
+        let listExams=[];        
+        if (ro[i][0]){
+            cont=0;
+            listPatients.push(ro[i][0])           
+            for (let j=1;j<128;++j){             
+                formValue[ro[0][j]]=ro[i][j];//formValue[ro[0][j]+j]=ro[i][j]
+            }
+            for(let j=128;j<271;++j){
+                examsValue[ro[0][j]]=ro[i+numberExams][j];//examsValue[ro[0][j]+j]=ro[i+numberExams][j]
+            }
+            listExams.push(examsValue);        
+            //DATASET[ro[0][1].toString()]=ro[i][0]
+            DATASET[ro[i][0].toString()]={              
+                form:formValue,
+                exams:listExams
+            }
+        }
+        else if (!ro[i][0]) {
+            ++cont;
+            for(let j=128;j<271;++j){
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
+            }
+            DATASET[ro[i-cont][0].toString()]["exams"].push(examsValue)
+            
+            
+        }
+        
+    }
+    let sendTEST=DATASET;
+    ipcRenderer.send("hello", sendTEST,listPatients,true); 
+}
+
+
+
+
 //module.exports.funONE=funONE
-export  {funONEmultiFiles, funONE, funONE2, funONEa}
+export  {funONEmultiFiles,funONEmultiFilesBric, funONE, funONE2, funONEa}
 /*pretty printing
 json
 serializer json-
