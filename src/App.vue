@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    
     <img alt="from Xlsx to JSON" src="./assets/logo.png">
     <First/>
   </div>
@@ -24,7 +25,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
-  background-color: rgb(187, 189, 184);
+  background-color: rgb(189, 187, 184);
 }
 *{
   background-color: rgb(187, 189, 184);

@@ -1,5 +1,5 @@
 //import fs from'fs'
-
+import {databaseStructure} from './dbSchema';
 //import path from 'path'
 const { ipcRenderer } = require("electron");
 const path = require('path')
@@ -85,6 +85,7 @@ let funONEa=function(ro) {
     e.initEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     a.dispatchEvent(e);
 }
+
 async function funONEmultiFiles(ro) {
     let DATASET={};
     let numberExams=0;
@@ -98,13 +99,12 @@ async function funONEmultiFiles(ro) {
             cont=0;
             listPatients.push(ro[i][0])           
             for (let j=1;j<128;++j){             
-                formValue[ro[0][j]]=ro[i][j];//formValue[ro[0][j]+j]=ro[i][j]
+                formValue[ro[0][j]]=ro[i][j];
             }
             for(let j=128;j<271;++j){
-                examsValue[ro[0][j]]=ro[i+numberExams][j];//examsValue[ro[0][j]+j]=ro[i+numberExams][j]
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
             }
             listExams.push(examsValue);        
-            //DATASET[ro[0][1].toString()]=ro[i][0]
             DATASET[ro[i][0].toString()]={              
                 form:formValue,
                 exams:listExams
@@ -126,37 +126,44 @@ async function funONEmultiFiles(ro) {
 }
 
 async function funONEmultiFilesBric(ro) {
+    let datStr=databaseStructure();
     let DATASET={};
     let numberExams=0;
     let cont=0;
     let listPatients=[];
+    let numberTab= Object.entries(datStr).length;
+    console.log(numberTab);
+
     for (let i=1;i<ro.length;++i){       
-        let formValue={};
         let examsValue={};
         let listExams=[];        
         if (ro[i][0]){
             cont=0;
-            listPatients.push(ro[i][0])           
-            for (let j=1;j<128;++j){             
-                formValue[ro[0][j]]=ro[i][j];//formValue[ro[0][j]+j]=ro[i][j]
+            listPatients.push(ro[i][0])
+            DATASET[ro[i][0].toString()]={};
+            //this processes all fields except the last one
+            for(let y=0;y<numberTab-1;++y){                
+                let list ={}
+                for(let x of Object.entries(datStr)[y][1]){
+                    list[ro[0][x]]=ro[i][x];
+                }              
+                DATASET[ro[i][0].toString()][Object.entries(datStr)[y][0]]=list                
             }
-            for(let j=128;j<271;++j){
-                examsValue[ro[0][j]]=ro[i+numberExams][j];//examsValue[ro[0][j]+j]=ro[i+numberExams][j]
-            }
-            listExams.push(examsValue);        
-            //DATASET[ro[0][1].toString()]=ro[i][0]
-            DATASET[ro[i][0].toString()]={              
-                form:formValue,
-                exams:listExams
-            }
-        }
-        else if (!ro[i][0]) {
-            ++cont;
-            for(let j=128;j<271;++j){
+            //this processes the last field of the dataset, because it is on multiple lines
+            for(let j of Object.entries(datStr)[numberTab-1][1]){
                 examsValue[ro[0][j]]=ro[i+numberExams][j];
             }
-            DATASET[ro[i-cont][0].toString()]["exams"].push(examsValue)
-            
+            listExams.push(examsValue);        
+            DATASET[ro[i][0].toString()][Object.entries(datStr)[numberTab-1][0]]=listExams
+
+        }
+        //line skip but by the same patient
+        else if (!ro[i][0]) {
+            ++cont;
+            for(let j of Object.entries(datStr)[numberTab-1][1]){
+                examsValue[ro[0][j]]=ro[i+numberExams][j];
+            }
+            DATASET[ro[i-cont][0].toString()][Object.entries(databaseStructure())[numberTab-1][0]].push(examsValue)            
             
         }
         

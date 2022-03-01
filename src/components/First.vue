@@ -1,12 +1,13 @@
 <template>
   <div class="hello">
+    
     <h1>{{ msg }}</h1>
     <p>
       <strong> Create a JSON file from XLSX</strong>     
     </p>
     <br><br><br>
     <b-form-group   label="  " label-cols-sm="2" label-size="lg">
-     <b-form-file class="fileForm"
+     <b-form-file  class="fileForm"
         v-model="file1" @change="fileCaricato"
         :state="Boolean(file1)"
        plain
@@ -24,7 +25,9 @@
         </b-form-checkbox>
         <br>
         <b-button class="btn btn-primary"  id="sendFromFiles" v-show="show" v-on:click="processFiles()">split in many files</b-button>
-       
+        <div>
+          <b-spinner type="grow" v-show="okLoad"></b-spinner>
+        </div>
 
     <!-- <div class="prova">      
         <button type="button" v-on:click="saveFile()">saveFile</button>
@@ -45,6 +48,7 @@ export default {
   },
   data() {
     return {
+      okLoad:false,
       showSpinner:false,
       idPatient: '',
       BoD: '',
@@ -93,12 +97,16 @@ export default {
       // });
     },
     async processFiles(){
+      this.okLoad=true;
       if(this.forBric){
         funONEmultiFilesBric(this.ro)
       }
       else{
         funONEmultiFiles(this.ro)
       }
+      setTimeout(()=>{ 
+                    this.okLoad=false;
+                }, 800);
     },
     fileCaricato(event) {
       this.showSpinner=true;
