@@ -1,5 +1,5 @@
 //import fs from'fs'
-import {databaseStructure} from './dbSchema';
+import {databaseStructure,maskDB} from './dbSchema';
 //import path from 'path'
 const { ipcRenderer } = require("electron");
 const path = require('path')
@@ -145,7 +145,7 @@ async function funONEmultiFilesBric(ro) {
             for(let y=0;y<numberTab-1;++y){                
                 let list ={}
                 for(let x of Object.entries(datStr)[y][1]){
-                    list[ro[0][x]]=ro[i][x];
+                    list[ro[0][x]+x]=ro[i][x];
                 }              
                 DATASET[ro[i][0].toString()][Object.entries(datStr)[y][0]]=list                
             }
@@ -163,7 +163,7 @@ async function funONEmultiFilesBric(ro) {
             for(let j of Object.entries(datStr)[numberTab-1][1]){
                 examsValue[ro[0][j]]=ro[i+numberExams][j];
             }
-            DATASET[ro[i-cont][0].toString()][Object.entries(databaseStructure())[numberTab-1][0]].push(examsValue)            
+            DATASET[ro[i-cont][0].toString()][Object.entries(datStr)[numberTab-1][0]].push(examsValue)            
             
         }
         
@@ -172,11 +172,95 @@ async function funONEmultiFilesBric(ro) {
     ipcRenderer.send("hello", sendTEST,listPatients,true); 
 }
 
+async function funONEmultiFilesAmplify (ro){
+    let dbMask=maskDB();
+    let allRecordsObject={}; //conterrà oggetti js per ogni tavola in dbMask,ed ogni lista ogetti records
+    //let code_patient=null;
+    // let numberTables=Object.entries(dbMask).length;
+    // console.log(numberTables);
 
+    //to generate lists of objects for every Tables maskDB
+    for(let tab in dbMask){
+        allRecordsObject[tab]=[]
+        console.log( allRecordsObject);
+    }
+
+    for (let i=1;i<ro.length;++i){
+       
+        if (ro[i][0]){
+            //code_patient=ro[i][0];
+            let ListValueFieldsInExls=[];
+            for (let j=0;j<170;++j){
+                ListValueFieldsInExls.push(ro[i][j])
+
+            }
+            console.log(ListValueFieldsInExls)
+            for(let tab in dbMask){ //questo scorre tra : COMORBIDITIES, ANAMNESIS, ECC
+                //let newRecord={};
+
+                // console.log(tab)
+                // allRecordsObject[tab].push(i)
+
+                //console.log(dbMask[tab]['FIELDS'])
+                //let numberOfTypePerTable=Object.entries(dbMask[tab]).length;
+                let numberOfFieldPerRecord=dbMask[tab]['FIELDS'].length //AD ESEMPIO 3 per COMORDIDITIES
+                console.log(numberOfFieldPerRecord)
+
+
+                for(let y in dbMask[tab]){//RESTITUISCE le INTESTAZIONI DEI CAMPI per ogni tab-ESEMPIO FIELDS,ASMA,DIABETE ecc
+                    if (y==='FIELDS'){continue}
+                    
+                    console.log(y)
+                    let newRecord={};
+                    for(let w=0;w <numberOfFieldPerRecord-1;++w ){
+                        if (w===0){newRecord[dbMask[tab]['FIELDS'][w]]=y}
+                        else{
+                            console.log(dbMask[tab]['FIELDS'][w])
+                            if(dbMask[tab][y][w-1]===null){
+                                newRecord[dbMask[tab]['FIELDS'][w]]=null
+                            }
+                            else{
+                                newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]]
+                            }
+                        }
+                    }
+                    console.log(newRecord);
+                }
+                
+            }
+          
+
+
+
+
+        }
+    }
+    console.log(allRecordsObject)
+
+
+    // for (let i=1;i<ro.length;++i){      //ro.length are the number of rows
+    //     code_patient=ro[i][0];
+    //     if (ro[i][0]){    //NEW ROW => NEW PATIENT
+                         
+    //     }
+        
+
+
+
+
+
+
+    // }
+
+
+
+
+
+}
 
 
 //module.exports.funONE=funONE
-export  {funONEmultiFiles,funONEmultiFilesBric, funONE, funONE2, funONEa}
+export  {funONEmultiFiles,funONEmultiFilesBric, funONEmultiFilesAmplify,funONE, funONE2, funONEa}
 /*pretty printing
 json
 serializer json-

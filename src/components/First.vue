@@ -20,13 +20,19 @@
         </div>
          <b-button  id="sendFromFile" v-show="show" v-on:click="processFile()">send From File</b-button>
         <br><br>
-        <b-form-checkbox id="checkbox-1" v-model="forBric" name="checkbox-1" value="true" unchecked-value="false" v-show="show" >
-           save for Bric
-        </b-form-checkbox>
-        <br>
-        <b-button class="btn btn-primary"  id="sendFromFiles" v-show="show" v-on:click="processFiles()">split in many files</b-button>
-        <div>
-          <b-spinner type="grow" v-show="okLoad"></b-spinner>
+        <div id='btn-container'>
+          <div id="checkbox-1" >
+            <b-form-checkbox v-model="forBric" name="checkbox-1" value="true" unchecked-value="false" v-show="show" >
+              save for Bric
+            </b-form-checkbox>
+          </div>
+        <div id="btnONE">
+        <b-button class="btn btn-primary"   v-show="show" v-on:click="processFiles()">split in many files</b-button>
+       </div> 
+          <div id="btnTWO"> 
+        <b-button class="btn btn-primary"   v-show="show" v-on:click="processFilesForAmplify()">records from file</b-button>
+        </div>
+          <b-spinner id='spin' type="grow" v-show="okLoad"></b-spinner>
         </div>
 
     <!-- <div class="prova">      
@@ -40,7 +46,7 @@
 <script>
 
 import readXlsxFile from 'read-excel-file'
-import {funONEa,funONEmultiFiles,funONEmultiFilesBric} from '../xlxsTOjson'
+import {funONEa,funONEmultiFiles,funONEmultiFilesBric, funONEmultiFilesAmplify} from '../xlxsTOjson'
 export default {
   name: 'First',
   props: {
@@ -104,6 +110,13 @@ export default {
       else{
         funONEmultiFiles(this.ro)
       }
+      setTimeout(()=>{ 
+                    this.okLoad=false;
+                }, 800);
+    },
+     async processFilesForAmplify(){
+      this.okLoad=true;
+      funONEmultiFilesAmplify(this.ro);
       setTimeout(()=>{ 
                     this.okLoad=false;
                 }, 800);
@@ -182,5 +195,48 @@ input[type="file"]{
   background-color:#ffffff ;
   border-style:unset;
 } */
+#btn-container{
+  border-style:outset;
+  display: grid;
+   grid-template-rows:80px ;
+    grid-template-columns: 25vw 25vw 25vw 15vw;
+    grid-template-areas:
+    "check btn1 btn2 spin";
+    grid-gap:5px;
+    align-content: center;
+    align-items: center;
+}
+#checkbox-1{
+ 
+  
+  padding: auto;
+  grid-area: check;
+  margin-top:5px;
+  margin-left: 60px;
+}
+#btnONE{
+   margin:auto;
+  padding: auto;
+  grid-area: btn1;
+  margin-top:20px;
+  margin-left: 15px;
+}
+#btnTWO{
+   margin:auto;
+  padding: auto;
+  grid-area: btn2;
+  margin-top:20px;
+  margin-left: 20px;  
+}
+#spin{
+  margin:auto;
+  padding: auto;
+  grid-area: spin;
+  margin-top:20px;
+  margin-left: 0px;  
+}
+.btn{
+width: 150px;
+}
 
 </style>
