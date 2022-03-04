@@ -224,7 +224,9 @@ async function funONEmultiFilesAmplify (ro){
                             }
                         }
                     }
+                    newRecord['PID']=ro[i][0]
                     console.log(newRecord);
+                    allRecordsObject[tab].push(newRecord)
                 }
                 
             }
@@ -236,7 +238,7 @@ async function funONEmultiFilesAmplify (ro){
         }
     }
     console.log(allRecordsObject)
-
+    ipcRenderer.send("singleRecords", allRecordsObject,true); 
 
     // for (let i=1;i<ro.length;++i){      //ro.length are the number of rows
     //     code_patient=ro[i][0];

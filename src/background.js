@@ -94,8 +94,22 @@ ipcMain.on('hello', (_event, value,listPatients,bric=false) => {
 //  fs.writeFile(`${app.getPath("downloads")}/PROVA.json`, dataOne, function (err) {
 //   if (err) throw err;               console.log('Results Received');
 // }); 
-
 })
+ipcMain.on("singleRecords", (_event, value) => {
+  //console.log(value) // will print value to Node console
+
+
+
+  for (let nameTab in value){
+    saveSingleRecords(value[nameTab],nameTab);
+  }
+ 
+//  fs.writeFile(`${app.getPath("downloads")}/PROVA.json`, dataOne, function (err) {
+//   if (err) throw err;               console.log('Results Received');
+// }); 
+})
+
+
 function savePatient(objJSON,name,bric=false){
   const dataOne = JSON.stringify(objJSON,null,'\t');
   let dirPatients='';
@@ -109,11 +123,22 @@ function savePatient(objJSON,name,bric=false){
   //make directory or check if it exist
   if(!fs.existsSync(pathDownload)){
     fs.mkdirSync(pathDownload) 
-    };
+  };
   //console.log(dataOne);
   fs.writeFile(`${pathDownload}/${name.toString()}.json`, dataOne, function (err) {
   if (err) throw err;          
-}); 
+  }); 
 }
 
+function saveSingleRecords(objJSON,name){
+  const dataOne = JSON.stringify(objJSON,null,'\t');
+  let dirName="RECORDS";
+  const pathDownload=path.join(app.getPath("downloads"), dirName);
+  if(!fs.existsSync(pathDownload)){
+    fs.mkdirSync(pathDownload) 
+  };
+  fs.writeFile(`${pathDownload}/${name.toString()}.json`, dataOne, function (err) {
+    if (err) throw err;          
+  });  
+}
 

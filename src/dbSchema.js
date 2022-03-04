@@ -13,19 +13,23 @@ function databaseStructure(){
 
 function maskDB(){
     return {
+        'TEST':{
+            'FIELDS':['TYPE','FIRST','SECOND','PID'],
+            'DATA_FILE':[7,8],
+        },
         'COMORDIDITIES':{
             'FIELDS':['TYPE','VALUE','PID'],
-            'ASMA':23,
-            'DIABETE':59,
-            'PATOLOGIE EPATICHE':62,
-            'PATOLOGIE RENALI':63,
-            'MALATTIE VASCOLARI PERIFERICHE':64,
-            'ULCERA':65,
-            'MALATTIE TESSUTO CONNETTIVO':66,
-            'ALTRE MALATTIE':68,
-            'SIBILI AL TORACE':71,
-            'DIAG.COVID19':126,
-            "1 yr probability diagnosis lung cancer during first CT":263
+            'ASMA':[23],
+            'DIABETE':[59],
+            'PATOLOGIE EPATICHE':[62],
+            'PATOLOGIE RENALI':[63],
+            'MALATTIE VASCOLARI PERIFERICHE':[64],
+            'ULCERA':[65,null],
+            'MALATTIE TESSUTO CONNETTIVO':[66],
+            'ALTRE MALATTIE':[68],
+            'SIBILI AL TORACE':[71],
+            'DIAG.COVID19':[126],
+            "1 yr probability diagnosis lung cancer during first CT":[263],
         },
         'ANAMNESIS':{
             'FIELDS':['TYPE','VALUE','PERIOD','PHARM-TREATMENT.','INFO','PID'],
@@ -64,7 +68,7 @@ function maskDB(){
 
 
         'DRUGS':{
-            'FIELDS':['TYPE','VALUE','PERIODO','TRAT-FARM','INFO','PID'],
+            'FIELDS':['TYPE','VALUE','DRUG-DOSAGE','SINCE_WHEN','DOSAGE','HOW_MANY_TIMES_A_DAY','PID'],
             'TRATTAMENTO FARMACOLOGICO GENERICO':[29,30,null,null,null],
             'TRATTAMENTO FARMACOLOGICO PER ASMA':[23,24,null,null,null],
             'TRATTAMENTO FARMACOLOGICO PER COLESTEROLO':[33,34,null,null,null],
@@ -76,26 +80,26 @@ function maskDB(){
 
         'CLINICAL_TEST':{
             'FIELDS':['TYPE','VALUE','DATE','INFO','PID'],
-            "PA (SYS)":[129,128,null,null],//CONROLLARE SE LA DATA CORRISPONDE A QUELLA DELLA TAC BASALE
-            "PA (DIA)":[130,128,null,null],
-            "FC (bpm)":[131,128,null,null],
-            "SATURIMETRIA":[132,128,null,null],
-            "CO: (ppm)":[133,128,null,null],
-            "Colesterolo TOT: (mg/dl)":[135,134,null,null],
-            "HDL: (mg/dl)":[136,134,null,null],
-            "LDL: (mg/dl)":[137,134,null,null],
-            "Trigliceridi: (mg/dl)":[138,134,null,null],
-            "FEV1(%)":[139,134,null,null],
-            "FVC":[140,134,null,null],
-            "FEV1(l)":[141,134,null,null],
-            "FVC(l)":[142,134,null,null],
-            "PEF(l/min)":[143,134,null,null],
-            "Ratio (FEV1/FVC):144":[144,134,null,null],
-            "BMI":[156,128,null,null],
-            "%PLCO":[166,128,null,null],
-            "Pack-Years":[167,128,null,null],
+            "PA (SYS)":[129,128,null],//CONROLLARE SE LA DATA CORRISPONDE A QUELLA DELLA TAC BASALE
+            "PA (DIA)":[130,128,null],
+            "FC (bpm)":[131,128,null],
+            "SATURIMETRIA":[132,128,null],
+            "CO: (ppm)":[133,128,null],
+            "Colesterolo TOT: (mg/dl)":[135,134,null],
+            "HDL: (mg/dl)":[136,134,null],
+            "LDL: (mg/dl)":[137,134,null],
+            "Trigliceridi: (mg/dl)":[138,134,null],
+            "FEV1(%)":[139,134,null],
+            "FVC":[140,134,null],
+            "FEV1(l)":[141,134,null],
+            "FVC(l)":[142,134,null],
+            "PEF(l/min)":[143,134,null],
+            "Ratio (FEV1/FVC):144":[144,134,null],
+            "BMI":[156,128,null],
+            "%PLCO":[166,128,null],
+            "Pack-Years":[167,128,null],
             //"Nodule Count":[168,128],//
-            "Total Nodules":[169,128,null,null]
+            "Total Nodules":[169,128,null]
             // "New Nodule":[170,128],//QUESTO FA PARTE DEI CLINICAL_TEST_FINDING
             // "posizioneprobabile":[171,128],//QUESTO FA PARTE DEI CLINICAL_TEST_FINDING
 
