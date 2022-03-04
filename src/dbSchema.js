@@ -13,12 +13,12 @@ function databaseStructure(){
 
 function maskDB(){
     return {
-        'TEST':{
-            'FIELDS':['TYPE','FIRST','SECOND','PID'],
-            'DATA_FILE':[7,8],
-        },
-        'COMORDIDITIES':{
-            'FIELDS':['TYPE','VALUE','PID'],
+        // 'TEST':{
+        //     'FIELDS':['TYPE','FIRST','SECOND','patientID'],
+        //     'DATA_FILE':[7,8],
+        // },
+        'Comorbidities':{
+            'FIELDS':['type','value','patientID'],
             'ASMA':[23],
             'DIABETE':[59],
             'PATOLOGIE EPATICHE':[62],
@@ -31,8 +31,8 @@ function maskDB(){
             'DIAG.COVID19':[126],
             "1 yr probability diagnosis lung cancer during first CT":[263],
         },
-        'ANAMNESIS':{
-            'FIELDS':['TYPE','VALUE','PERIOD','PHARM-TREATMENT.','INFO','PID'],
+        'Anamnesis':{
+            'FIELDS':['type','value','period','pharmTreatment','info','patientID'],
             'TUMORE DIAGNOSTICATO':[20,21,null,22],
             'POLMONITE':[25,null,null,null],
             'ENFISEMA O BPCO':[26,null,null,null],
@@ -57,8 +57,8 @@ function maskDB(){
             'STATO DI SALUTE GENERALE CHE LIMITA LO SVOLGIMENTO DI ATTIVITÀ IMPEGNATIVE':[96,null,null,null]
         },
 
-        'FAMILY_ANAMNESIS':{
-            'FIELDS':['TYPE','VALUE','DEAD OF CANCER','DEAD OF A HEART ATTACK','SMOKER FOR HOW MANY YEARS','PID'],
+        'AnamnesiFamily':{
+            'FIELDS':['type','value','deadOfCancer','deadOFHeartAttack','smokerForHwManyYears','patientID'],
             'PARENTE GENERICO':[81,82,null,null,],
             'DONNA IN FAMIGLIA <65 ANNI':[null,null,83,null],
             'UOMO IN FAMIGLIA <65 ANNI':[null,null,84,null],
@@ -67,8 +67,8 @@ function maskDB(){
 
 
 
-        'DRUGS':{
-            'FIELDS':['TYPE','VALUE','DRUG-DOSAGE','SINCE_WHEN','DOSAGE','HOW_MANY_TIMES_A_DAY','PID'],
+        'Drugs':{
+            'FIELDS':['type','value','drugsAndDosage','sinceWhen','dosage','dailyDosage','patientID'],
             'TRATTAMENTO FARMACOLOGICO GENERICO':[29,30,null,null,null],
             'TRATTAMENTO FARMACOLOGICO PER ASMA':[23,24,null,null,null],
             'TRATTAMENTO FARMACOLOGICO PER COLESTEROLO':[33,34,null,null,null],
@@ -78,8 +78,8 @@ function maskDB(){
             'ALTRI FARMACI':[69,70,null,null,null]
         },
 
-        'CLINICAL_TEST':{
-            'FIELDS':['TYPE','VALUE','DATE','INFO','PID'],
+        'ClinicalTest':{
+            'FIELDS':['type','value','date','info','patientID'],
             "PA (SYS)":[129,128,null],//CONROLLARE SE LA DATA CORRISPONDE A QUELLA DELLA TAC BASALE
             "PA (DIA)":[130,128,null],
             "FC (bpm)":[131,128,null],
