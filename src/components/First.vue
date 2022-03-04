@@ -18,19 +18,19 @@
         <div>
            <b-spinner style="width: 3rem; height: 3rem;"  v-show="showSpinner"></b-spinner>
         </div>
-         <b-button  id="sendFromFile" v-show="show" v-on:click="processFile()">send From File</b-button>
+         <b-button  id="sendFromFile" :disabled="disableBtn" v-show="show" v-on:click="processFile()">send From File</b-button>
         <br><br>
         <div id='btn-container'>
           <div id="checkbox-1" >
-            <b-form-checkbox v-model="forBric" name="checkbox-1" value="true" unchecked-value="false" v-show="show" >
+            <b-form-checkbox v-model="forBric" :disabled="disableBtn"  name="checkbox-1" value="true" unchecked-value="false" v-show="show" >
               save for Bric
             </b-form-checkbox>
           </div>
         <div id="btnONE">
-        <b-button class="btn btn-primary"   v-show="show" v-on:click="processFiles()">split in many files</b-button>
+        <b-button class="btn btn-primary"   v-show="show" :disabled="disableBtn" v-on:click="processFiles()">split in many files</b-button>
        </div> 
           <div id="btnTWO"> 
-        <b-button class="btn btn-primary"   v-show="show" v-on:click="processFilesForAmplify()">records from file</b-button>
+        <b-button class="btn btn-primary"  :disabled="disableBtn" v-show="show" v-on:click="processFilesForAmplify()">records from file</b-button>
         </div>
           <b-spinner id='spin' type="grow" v-show="okLoad"></b-spinner>
         </div>
@@ -54,13 +54,14 @@ export default {
   },
   data() {
     return {
+      disableBtn:true,
       okLoad:false,
       showSpinner:false,
       idPatient: '',
       BoD: '',
       todos: [] ,
       file1: null, 
-      show: false,
+      show: true,
       ro:{},
       bu:'',
       forBric:false,
@@ -134,6 +135,7 @@ export default {
         console.log(rows.length)
         this.showSpinner=false;
         this.show=true;
+        this.disableBtn=false;
         this.ro=rows;
         })         
       },
