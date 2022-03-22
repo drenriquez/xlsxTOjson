@@ -220,11 +220,16 @@ async function funONEmultiFilesAmplify (ro){
                                 newRecord[dbMask[tab]['FIELDS'][w]]=null
                             }
                             else{
-                                newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]]
+                                if(ListValueFieldsInExls[dbMask[tab][y][w-1]]===undefined ||ListValueFieldsInExls[dbMask[tab][y][w-1]]===null){
+                                    newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]]
+                                }
+                                else{
+                                    newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]].toString()
+                                }
                             }
                         }
                     }
-                    newRecord['PID']=ro[i][0]
+                    newRecord[dbMask[tab]['FIELDS'][dbMask[tab]['FIELDS'].length-1]]=ro[i][0]
                     console.log(newRecord);
                     allRecordsObject[tab].push(newRecord)
                 }

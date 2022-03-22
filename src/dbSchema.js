@@ -80,6 +80,7 @@ function maskDB(){
 
         'ClinicalTest':{
             'FIELDS':['type','value','date','info','patientID'],
+            "TAC BASALE":[null,128,null],
             "PA (SYS)":[129,128,null],//CONROLLARE SE LA DATA CORRISPONDE A QUELLA DELLA TAC BASALE
             "PA (DIA)":[130,128,null],
             "FC (bpm)":[131,128,null],
@@ -89,25 +90,43 @@ function maskDB(){
             "HDL: (mg/dl)":[136,134,null],
             "LDL: (mg/dl)":[137,134,null],
             "Trigliceridi: (mg/dl)":[138,134,null],
-            "FEV1(%)":[139,134,null],
-            "FVC":[140,134,null],
-            "FEV1(l)":[141,134,null],
-            "FVC(l)":[142,134,null],
-            "PEF(l/min)":[143,134,null],
-            "Ratio (FEV1/FVC):144":[144,134,null],
+            "FEV1(%)":[139,128,null],
+            "FVC":[140,128,null],
+            "FEV1(l)":[141,128,null],
+            "FVC(l)":[142,128,null],
+            "PEF(l/min)":[143,128,null],
+            "Ratio (FEV1/FVC):144":[144,128,null],
+            "TEST MOTIVAZIONALE":[146,128,null],
+            "TEST DIPENDENZA":[147,128,null],
+            "Apollo/eNCIRCLeD":[148,128,null],
             "BMI":[156,128,null],
             "%PLCO":[166,128,null],
             "Pack-Years":[167,128,null],
-            //"Nodule Count":[168,128],//
-            "Total Nodules":[169,128,null]
-            // "New Nodule":[170,128],//QUESTO FA PARTE DEI CLINICAL_TEST_FINDING
-            // "posizioneprobabile":[171,128],//QUESTO FA PARTE DEI CLINICAL_TEST_FINDING
-
-
-
-
-            
-
+            "PLCO/6%/ 1yrs":[195,null,null],
+            "VISCHT":[null,196,null],
+            "Rischio alla BASALE":[197,128,null],
+            "Rischio alle SUCCESSIVE":[198,null,null],
+            "1 FUP (months)":[199,200,null],
+            "1 FUP-LDCT":[null,200,null],
+            "New Nodule 1":[201,200,null],
+            "2 FUP (months)":[214,215,null],
+            "2LDCT":[null,215,null],
+            "New Nodule 2":[216,215,null],
+            "3 FUP (months)":[229,230,null],
+            "3LDCT":[null,230,null],
+            "New Nodule 3":[230,231,null],
+            "Total Nodules":[169,128,null],
+            "PET_RESULT":[246,245,null],
+            "BIO_RESULT":[248,247,null],
+            "SGRY_DATE":[null,249,null],
+            "MALIGNO\MALIGNO_COLLATERALE\MALIGNO_SECONDARY":[250,null,253],
+            "SRGY_APPROACH":[251,null,null],
+            "TYPE_RESECTION":[252,null,null],
+            "Stadio sec. T 8th":[254,null,null],
+            "Stadio sec. N 8th":[255,null,null],
+            "Stadio sec. M 8th":[256,null,null],
+            "Stadio sec.Masaoka-Koga":[257,null,null],
+            "1 yr probability diagnosis lung cancer during first CT":[264,null,null],
         }
     }
 
