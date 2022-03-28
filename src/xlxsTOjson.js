@@ -190,7 +190,7 @@ async function funONEmultiFilesAmplify (ro){
         if (ro[i][0]){
             //code_patient=ro[i][0];
             let ListValueFieldsInExls=[];
-            for (let j=0;j<170;++j){
+            for (let j=0;j<270;++j){
                 ListValueFieldsInExls.push(ro[i][j])
 
             }
