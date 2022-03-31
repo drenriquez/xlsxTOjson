@@ -81,7 +81,7 @@ function maskDB(){
         'ClinicalTest':{
             'FIELDS':['type','value','date','info','patientID'],
             "TAC BASALE":[null,128,null],
-            "PA (SYS)":[129,128,null],//CONROLLARE SE LA DATA CORRISPONDE A QUELLA DELLA TAC BASALE
+            "PA (SYS)":[129,128,null],
             "PA (DIA)":[130,128,null],
             "FC (bpm)":[131,128,null],
             "SATURIMETRIA":[132,128,null],
@@ -98,24 +98,24 @@ function maskDB(){
             "Ratio (FEV1/FVC):144":[144,128,null],
             "TEST MOTIVAZIONALE":[146,128,null],
             "TEST DIPENDENZA":[147,128,null],
-            "Apollo/eNCIRCLeD":[148,128,null],
+           // "Apollo/eNCIRCLeD":[148,128,null],
             "BMI":[156,128,null],
             "%PLCO":[166,128,null],
             "Pack-Years":[167,128,null],
-            "LUNG: Lymph nodes":[186,null,null],
-            "LUNG: COPD":[187,null,null],
-            "LUNG: Fibrosis":[188,null,null],
-            "LUNG: Pleural Effusion":[189,null,null],
-            "LUNG: Other":[190,null,null],
-            "HEART: Coronary Calcification":[191,null,null],
-            "Enfisema":[192,null,193],
-            "CTDI vol(mGy)":[194,null,null],
-            "PLCO/6%/ 1yrs":[195,null,null],
+            "LUNG: Lymph nodes":[186,128,null],
+            "LUNG: COPD":[187,128,null],
+            "LUNG: Fibrosis":[188,128,null],
+            "LUNG: Pleural Effusion":[189,128,null],
+            "LUNG: Other":[190,128,null],
+            "HEART: Coronary Calcification":[191,128,null],
+            "Enfisema":[192,128,193],
+            "CTDI vol(mGy)":[194,128,null],
+            "PLCO/6%/ 1yrs":[195,128,null],
             "VISCHT":[null,196,null],
             "Rischio alla BASALE":[197,128,null],
-            "Rischio alle SUCCESSIVE":[198,null,null],
+            "Rischio alle SUCCESSIVE":[198,128,null],
             "1 FUP (months)":[199,200,null],
-            "1 FUP-LDCT":[null,200,null],
+            //"1 FUP-LDCT":[null,200,null],
             "New Nodule 1":[201,200,null],
             "2 FUP (months)":[214,215,null],
             "2LDCT":[null,215,null],
@@ -137,14 +137,47 @@ function maskDB(){
             "1 yr probability diagnosis lung cancer during first CT":[263,null,null],
         }
     }
-
-
-
-
-
-
-
-
 }
+function nodulesMaskDB(){
+    return {
+        
+            'COUNT':[168],
+            'DATE':[128,200,215,230],
+            'PROB.POS':[171,202,217,232],
+            'LONG_AXIS':[172,203,218,233],
+            'SHORT_AXIS':[173,204,219,234],
+            'MAX_DIAM':[174,205,220,235],
+            'CONSISTENZA_NODULO':[180,207,222,237],
+            'FORMA_SPICULATA':[183,208,223,238],
+            'NODULO_VISTO_IN_SERIE':[184,209,224,239],
+            'NODULO_VISTO_IN_IMMAGINE':[185,210,225,240],
+            'PLCO_6yrs':[166],
+            'PLCO_1yrs':[195],
+            'VSCHT':[196],
+            'Rischio_alla_BASALE':[197],
+            'Rischio_alle_SUCCESSIVE':[198],
+            'VDT':[null,211,226,241],
+            'STATUS':[null,212,227,242],
+            'CHANGE_VOLtot_percent':[null,213,228,243],
+            'PET_DATE':[244],
+            'PET_RESULT':[245],
+            'BIO_DATE':[244],
+            'BIO_RESULT':[245],
+            "MALIGNO_MALIGNO_COLLATERALE_MALIGNO_SECONDARY":[249],
+            "SGRY_DATE":[248],
+            "SRGY_APPROACH":[250],
+            "TYPE_RESECTION":[251],
+            "NOTE":[252],
+            "Stadio_sec_T_8th":[253],
+            "Stadio_sec_N_8th":[254],
+            "Stadio_sec_M_8th":[255],
+            "Stadio_sec_Masaoka_Koga":[256],
 
-export {databaseStructure,maskDB}
+            
+      
+
+
+
+    }
+}
+export {databaseStructure,maskDB,nodulesMaskDB}

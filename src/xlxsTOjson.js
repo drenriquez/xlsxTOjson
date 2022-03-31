@@ -1,5 +1,5 @@
 //import fs from'fs'
-import {databaseStructure,maskDB} from './dbSchema';
+import {databaseStructure,maskDB,nodulesMaskDB} from './dbSchema';
 //import path from 'path'
 const { ipcRenderer } = require("electron");
 const path = require('path')
@@ -174,48 +174,64 @@ async function funONEmultiFilesBric(ro) {
 
 async function funONEmultiFilesAmplify (ro){
     let dbMask=maskDB();
+    let dbMaskNodule=nodulesMaskDB();
     let allRecordsObject={}; //conterrà oggetti js per ogni tavola in dbMask,ed ogni lista ogetti records
-    //let code_patient=null;
+    allRecordsObject['Nodules']=[];
+    let code_patient=null;
+    //let listNodules=[];
     // let numberTables=Object.entries(dbMask).length;
     // console.log(numberTables);
 
     //to generate lists of objects for every Tables maskDB
-    for(let tab in dbMask){
-        allRecordsObject[tab]=[]
-        console.log( allRecordsObject);
+    for(let tab in dbMask){//mask è un oggetto contenente oggetti,tab è una stringa, che sarà 'COMORBIDITIES','ASMA' ecc
+        allRecordsObject[tab]=[]//sarà un oggetto contenente liste , cioè {'COMORBIDITIES':[],'ASMA':[], ...}
     }
 
     for (let i=1;i<ro.length;++i){
-       
-        if (ro[i][0]){
-            //code_patient=ro[i][0];
-            let ListValueFieldsInExls=[];
+        let newNodule={};
+        let ListValueFieldsInExls=[];
             for (let j=0;j<270;++j){
                 ListValueFieldsInExls.push(ro[i][j])
-
             }
-            console.log(ListValueFieldsInExls)
+        if (ro[i][0]){       //prima riga di ogni paziente
+            code_patient=ro[i][0];
+            // let ListValueFieldsInExls=[];
+            // for (let j=0;j<270;++j){
+            //     ListValueFieldsInExls.push(ro[i][j])
+            // }
             for(let tab in dbMask){ //questo scorre tra : COMORBIDITIES, ANAMNESIS, ECC
-                //let newRecord={};
+                
+                let numberOfFieldPerRecord=dbMask[tab]['FIELDS'].length //AD ESEMPIO 3 per COMORDIDITIES dove 'FIELDS':['type','value','patientID'],
+                //console.log(numberOfFieldPerRecord)
 
-                // console.log(tab)
-                // allRecordsObject[tab].push(i)
-
-                //console.log(dbMask[tab]['FIELDS'])
-                //let numberOfTypePerTable=Object.entries(dbMask[tab]).length;
-                let numberOfFieldPerRecord=dbMask[tab]['FIELDS'].length //AD ESEMPIO 3 per COMORDIDITIES
-                console.log(numberOfFieldPerRecord)
-
+  /*
+            il seguente codice genera i singoli records, per esempio per COMORBIDITIES:
+                                {
+                                    "type": "ASMA",
+                                    "value": "No",
+                                    "patientID": "HSR001"
+                                },
+                                {
+                                    "type": "DIABETE",
+                                    "value": "No",
+                                    "patientID": "HSR001"
+                                },
+                                {
+                                    "type": "PATOLOGIE EPATICHE",
+                                    "value": "NO",
+                                    "patientID": "HSR001"
+                                }, 
+            */
 
                 for(let y in dbMask[tab]){//RESTITUISCE le INTESTAZIONI DEI CAMPI per ogni tab-ESEMPIO FIELDS,ASMA,DIABETE ecc
                     if (y==='FIELDS'){continue}
                     
-                    console.log(y)
+                    //console.log(y)
                     let newRecord={};
                     for(let w=0;w <numberOfFieldPerRecord-1;++w ){
                         if (w===0){newRecord[dbMask[tab]['FIELDS'][w]]=y}
                         else{
-                            console.log(dbMask[tab]['FIELDS'][w])
+                            //console.log(dbMask[tab]['FIELDS'][w])
                             if(dbMask[tab][y][w-1]===null){
                                 newRecord[dbMask[tab]['FIELDS'][w]]=null
                             }
@@ -230,38 +246,41 @@ async function funONEmultiFilesAmplify (ro){
                         }
                     }
                     newRecord[dbMask[tab]['FIELDS'][dbMask[tab]['FIELDS'].length-1]]=ro[i][0]
-                    console.log(newRecord);
-                    allRecordsObject[tab].push(newRecord)
+                    //console.log(newRecord);
+                    allRecordsObject[tab].push(newRecord);// alla fine sarà {'COMORBIDITIES':[{...},{...},...],'ASMA':[{...},{...},...], ...}
                 }
                 
             }
-          
-
-
-
 
         }
+        //di seguito il codice per generare i records NODULI, 'NODULES':[{...},{...},...], che verrà aggiunto all'oggetto allRecordsObject :
+            //siamo sempre dentro IF (ro[i][0])
+           // console.log(dbMaskNodule);
+            console.log(code_patient);
+            
+        for(let fieldInMaskNodules in dbMaskNodule){
+            let arrayOfField=[]
+            //newNodule[fieldInMaskNodules]=[];
+            //console.log(dbMaskNodule[fieldInMaskNodules]);
+            for (let index of dbMaskNodule[fieldInMaskNodules]){
+                if (fieldInMaskNodules==='DATE' && ListValueFieldsInExls[index]!=null ){
+                    console.log(ListValueFieldsInExls[index])
+                    arrayOfField.push(ListValueFieldsInExls[index].toString().substr(4,11))
+                }
+                else{
+                    arrayOfField.push(ListValueFieldsInExls[index])
+                }
+                
+                //console.log(index)
+            }
+            newNodule[fieldInMaskNodules]=arrayOfField.toString()
+        }
+        newNodule['patientID']=code_patient
+        console.log(newNodule);
+        allRecordsObject['Nodules'].push(newNodule);
     }
     console.log(allRecordsObject)
     ipcRenderer.send("singleRecords", allRecordsObject,true); 
-
-    // for (let i=1;i<ro.length;++i){      //ro.length are the number of rows
-    //     code_patient=ro[i][0];
-    //     if (ro[i][0]){    //NEW ROW => NEW PATIENT
-                         
-    //     }
-        
-
-
-
-
-
-
-    // }
-
-
-
-
 
 }
 
