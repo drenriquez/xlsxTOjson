@@ -1,5 +1,5 @@
 //import fs from'fs'
-import {databaseStructure,maskDB,nodulesMaskDB} from './dbSchema';
+import {databaseStructure,maskDB,nodulesMaskDB,deleteKeyInMaskDB} from './dbSchema';
 //import path from 'path'
 const { ipcRenderer } = require("electron");
 const path = require('path')
@@ -174,89 +174,98 @@ async function funONEmultiFilesBric(ro) {
 
 async function funONEmultiFilesAmplify (ro){
     let dbMask=maskDB();
+    let keyToDelete=deleteKeyInMaskDB();
+    console.log(keyToDelete);
     let dbMaskNodule=nodulesMaskDB();
     let allRecordsObject={}; //conterrà oggetti js per ogni tavola in dbMask,ed ogni lista ogetti records
     allRecordsObject['Nodules']=[];
     let code_patient=null;
-    //let listNodules=[];
-    // let numberTables=Object.entries(dbMask).length;
-    // console.log(numberTables);
-
-    //to generate lists of objects for every Tables maskDB
     for(let tab in dbMask){//mask è un oggetto contenente oggetti,tab è una stringa, che sarà 'COMORBIDITIES','ASMA' ecc
         allRecordsObject[tab]=[]//sarà un oggetto contenente liste , cioè {'COMORBIDITIES':[],'ASMA':[], ...}
     }
-
+    let dateTest={};
     for (let i=1;i<ro.length;++i){
         let newNodule={};
         let ListValueFieldsInExls=[];
             for (let j=0;j<270;++j){
                 ListValueFieldsInExls.push(ro[i][j])
             }
+     
         if (ro[i][0]){       //prima riga di ogni paziente
             code_patient=ro[i][0];
-            // let ListValueFieldsInExls=[];
-            // for (let j=0;j<270;++j){
-            //     ListValueFieldsInExls.push(ro[i][j])
-            // }
-            for(let tab in dbMask){ //questo scorre tra : COMORBIDITIES, ANAMNESIS, ECC
+            dateTest={'TAC_Basale':ListValueFieldsInExls[128],'1_FUP':ListValueFieldsInExls[200],'2_FUP':ListValueFieldsInExls[215],'3_FUP':ListValueFieldsInExls[230]};
+        }
+        for(let tab in dbMask){ //questo scorre tra : COMORBIDITIES, ANAMNESIS, ECC
+            if(ro[i][0]===null && tab!='ImagingTestFinding'){
+                continue
+            }
+            let numberOfFieldPerRecord=dbMask[tab]['FIELDS'].length //AD ESEMPIO 3 per COMORDIDITIES dove 'FIELDS':['type','value','patientID'],
+
+        /*
+        il seguente codice genera i singoli records, per esempio per COMORBIDITIES:
+                            {
+                                "type": "ASMA",
+                                "value": "No",
+                                "patientID": "HSR001"
+                            },
+                            {
+                                "type": "DIABETE",
+                                "value": "No",
+                                "patientID": "HSR001"
+                            },
+                            {
+                                "type": "PATOLOGIE EPATICHE",
+                                "value": "NO",
+                                "patientID": "HSR001"
+                            }, 
+        */
+
+            for(let y in dbMask[tab]){//RESTITUISCE le INTESTAZIONI DEI CAMPI per ogni tab-ESEMPIO FIELDS,ASMA,DIABETE ecc
+                if (y==='FIELDS'){continue}
                 
-                let numberOfFieldPerRecord=dbMask[tab]['FIELDS'].length //AD ESEMPIO 3 per COMORDIDITIES dove 'FIELDS':['type','value','patientID'],
-                //console.log(numberOfFieldPerRecord)
-
-  /*
-            il seguente codice genera i singoli records, per esempio per COMORBIDITIES:
-                                {
-                                    "type": "ASMA",
-                                    "value": "No",
-                                    "patientID": "HSR001"
-                                },
-                                {
-                                    "type": "DIABETE",
-                                    "value": "No",
-                                    "patientID": "HSR001"
-                                },
-                                {
-                                    "type": "PATOLOGIE EPATICHE",
-                                    "value": "NO",
-                                    "patientID": "HSR001"
-                                }, 
-            */
-
-                for(let y in dbMask[tab]){//RESTITUISCE le INTESTAZIONI DEI CAMPI per ogni tab-ESEMPIO FIELDS,ASMA,DIABETE ecc
-                    if (y==='FIELDS'){continue}
-                    
-                    //console.log(y)
-                    let newRecord={};
-                    for(let w=0;w <numberOfFieldPerRecord-1;++w ){
-                        if (w===0){newRecord[dbMask[tab]['FIELDS'][w]]=y}
+                //console.log(y)
+                let newRecord={};
+                for(let w=0;w <numberOfFieldPerRecord-1;++w ){
+                    if (w===0){newRecord[dbMask[tab]['FIELDS'][w]]=y}
+                    else{
+                        if(dbMask[tab][y][w-1]===null){
+                            newRecord[dbMask[tab]['FIELDS'][w]]=null
+                        }
                         else{
-                            //console.log(dbMask[tab]['FIELDS'][w])
-                            if(dbMask[tab][y][w-1]===null){
-                                newRecord[dbMask[tab]['FIELDS'][w]]=null
+                            //the following code converts the values to string
+                            if(ListValueFieldsInExls[dbMask[tab][y][w-1]]===undefined ||ListValueFieldsInExls[dbMask[tab][y][w-1]]===null){
+                                newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]]
                             }
                             else{
-                                if(ListValueFieldsInExls[dbMask[tab][y][w-1]]===undefined ||ListValueFieldsInExls[dbMask[tab][y][w-1]]===null){
-                                    newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]]
-                                }
-                                else{
-                                    newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]].toString()
-                                }
+                                newRecord[dbMask[tab]['FIELDS'][w]]=ListValueFieldsInExls[dbMask[tab][y][w-1]].toString()
                             }
                         }
                     }
-                    newRecord[dbMask[tab]['FIELDS'][dbMask[tab]['FIELDS'].length-1]]=ro[i][0]
-                    //console.log(newRecord);
-                    allRecordsObject[tab].push(newRecord);// alla fine sarà {'COMORBIDITIES':[{...},{...},...],'ASMA':[{...},{...},...], ...}
+                }
+                newRecord[dbMask[tab]['FIELDS'][dbMask[tab]['FIELDS'].length-1]]=ro[i][0]
+                //the following code sets the date for the ImagingTestFinding, date saved in the lines where there is the patient code
+                if(tab==='ImagingTestFinding'){
+                    newRecord['date']=dateTest[newRecord['info']]
+                    newRecord['imagingTestID']=code_patient+newRecord['date']
+                }
+                //the following code ensures that undated ImagingTests are not logged
+                if((tab==='ImagingTest'||tab==='ImagingTestFinding') && (newRecord['date']===null)){
+                    continue
                 }
                 
+                else{//this function is used to delete the keys of a specific table indicate in deleteKeyInMaskD
+                    for (let key in keyToDelete[tab]){
+                        console.log(keyToDelete[tab][key]);
+                        delete newRecord[keyToDelete[tab][key]]
+                    }
+                    allRecordsObject[tab].push(newRecord);// alla fine sarà {'COMORBIDITIES':[{...},{...},...],'ASMA':[{...},{...},...], ...}
+                }
             }
-
         }
         //di seguito il codice per generare i records NODULI, 'NODULES':[{...},{...},...], che verrà aggiunto all'oggetto allRecordsObject :
             //siamo sempre dentro IF (ro[i][0])
            // console.log(dbMaskNodule);
-            console.log(code_patient);
+           // console.log(code_patient);
             
         for(let fieldInMaskNodules in dbMaskNodule){
             let arrayOfField=[]
@@ -264,7 +273,7 @@ async function funONEmultiFilesAmplify (ro){
             //console.log(dbMaskNodule[fieldInMaskNodules]);
             for (let index of dbMaskNodule[fieldInMaskNodules]){
                 if (fieldInMaskNodules==='DATE' && ListValueFieldsInExls[index]!=null ){
-                    console.log(ListValueFieldsInExls[index])
+                   // console.log(ListValueFieldsInExls[index])
                     arrayOfField.push(ListValueFieldsInExls[index].toString().substr(4,11))
                 }
                 else{
@@ -276,7 +285,7 @@ async function funONEmultiFilesAmplify (ro){
             newNodule[fieldInMaskNodules]=arrayOfField.toString()
         }
         newNodule['patientID']=code_patient
-        console.log(newNodule);
+       // console.log(newNodule);
         allRecordsObject['Nodules'].push(newNodule);
     }
     console.log(allRecordsObject)

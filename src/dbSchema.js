@@ -135,7 +135,29 @@ function maskDB(){
             "Stadio sec. M 8th":[255,null,null],
             "Stadio sec.Masaoka-Koga":[256,null,null],
             "1 yr probability diagnosis lung cancer during first CT":[263,null,null],
+        },
+        'ImagingTest':{
+            'FIELDS':['Description','date','patientID'],
+            'TAC_Basale':[128],
+            '1 FUP':[200],
+            '2 FUP':[215],
+            '3 FUP':[230],
+        },
+        'ImagingTestFinding':{
+            'FIELDS':['info','date','noduleCount','posProb','LongAxis','ShortAxis','MaxDiam','VolTol','consistenzaNodulo','bordiReg','CalcificazioneBenignità','FormaSpiculata','noduloVistoInSerie','noduloVistoInImmagine','VDT','status','change','imagingTestID'],
+            'TAC_Basale':[128,168,171,172,173,174,175,180,181,182,183,184,185,null,null,null],
+            '1_FUP':[200,168,202,203,204,205,206,207,null,null,208,209,210,211,212,213],
+            '2_FUP':[215,168,217,218,219,220,221,222,null,null,223,224,225,226,227,228],
+            '3_FUP':[230,168,232,233,234,235,236,237,null,null,238,239,240,241,242,243],
         }
+    }
+}
+
+
+//this function is used to delete the keys of a specific table
+function deleteKeyInMaskDB(){
+    return {
+        'ImagingTestFinding':['info','date']
     }
 }
 function nodulesMaskDB(){
@@ -173,11 +195,6 @@ function nodulesMaskDB(){
             "Stadio_sec_M_8th":[255],
             "Stadio_sec_Masaoka_Koga":[256],
 
-            
-      
-
-
-
     }
 }
-export {databaseStructure,maskDB,nodulesMaskDB}
+export {databaseStructure,maskDB,nodulesMaskDB,deleteKeyInMaskDB}
