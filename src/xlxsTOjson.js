@@ -242,7 +242,7 @@ async function funONEmultiFilesAmplify (ro){
                 if(tab==='ImagingTestFinding'){
                     newRecord['date']=dateTest[newRecord['info']]
                     if(newRecord['date']!=null){
-                        newRecord['imagingTestID']=code_patient+newRecord['date'].toString().substr(4,11)
+                        newRecord['imagingTestID']=code_patient+newRecord['date'].toString().substr(4,11)+newRecord['info']
                     }
                 }
                 //the following code ensures that undated ImagingTests are not logged
