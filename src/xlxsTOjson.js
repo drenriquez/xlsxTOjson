@@ -175,7 +175,6 @@ async function funONEmultiFilesBric(ro) {
 async function funONEmultiFilesAmplify (ro){
     let dbMask=maskDB();
     let keyToDelete=deleteKeyInMaskDB();
-    console.log(keyToDelete);
     let dbMaskNodule=nodulesMaskDB();
     let allRecordsObject={}; //conterrà oggetti js per ogni tavola in dbMask,ed ogni lista ogetti records
     allRecordsObject['Nodules']=[];
@@ -189,8 +188,7 @@ async function funONEmultiFilesAmplify (ro){
         let ListValueFieldsInExls=[];
             for (let j=0;j<270;++j){
                 ListValueFieldsInExls.push(ro[i][j])
-            }
-     
+            } 
         if (ro[i][0]){       //prima riga di ogni paziente
             code_patient=ro[i][0];
             dateTest={'TAC_Basale':ListValueFieldsInExls[128],'1_FUP':ListValueFieldsInExls[200],'2_FUP':ListValueFieldsInExls[215],'3_FUP':ListValueFieldsInExls[230]};
@@ -200,7 +198,6 @@ async function funONEmultiFilesAmplify (ro){
                 continue
             }
             let numberOfFieldPerRecord=dbMask[tab]['FIELDS'].length //AD ESEMPIO 3 per COMORDIDITIES dove 'FIELDS':['type','value','patientID'],
-
         /*
         il seguente codice genera i singoli records, per esempio per COMORBIDITIES:
                             {
@@ -219,11 +216,9 @@ async function funONEmultiFilesAmplify (ro){
                                 "patientID": "HSR001"
                             }, 
         */
-
             for(let y in dbMask[tab]){//RESTITUISCE le INTESTAZIONI DEI CAMPI per ogni tab-ESEMPIO FIELDS,ASMA,DIABETE ecc
                 if (y==='FIELDS'){continue}
                 
-                //console.log(y)
                 let newRecord={};
                 for(let w=0;w <numberOfFieldPerRecord-1;++w ){
                     if (w===0){newRecord[dbMask[tab]['FIELDS'][w]]=y}
@@ -246,7 +241,9 @@ async function funONEmultiFilesAmplify (ro){
                 //the following code sets the date for the ImagingTestFinding, date saved in the lines where there is the patient code
                 if(tab==='ImagingTestFinding'){
                     newRecord['date']=dateTest[newRecord['info']]
-                    newRecord['imagingTestID']=code_patient+newRecord['date']
+                    if(newRecord['date']!=null){
+                        newRecord['imagingTestID']=code_patient+newRecord['date'].toString().substr(4,11)
+                    }
                 }
                 //the following code ensures that undated ImagingTests are not logged
                 if((tab==='ImagingTest'||tab==='ImagingTestFinding') && (newRecord['date']===null)){
@@ -255,8 +252,10 @@ async function funONEmultiFilesAmplify (ro){
                 
                 else{//this function is used to delete the keys of a specific table indicate in deleteKeyInMaskD
                     for (let key in keyToDelete[tab]){
-                        console.log(keyToDelete[tab][key]);
                         delete newRecord[keyToDelete[tab][key]]
+                    }
+                    if(newRecord['date'] && newRecord['date']!='richiesta esami ematici x mail'){
+                        newRecord['date']=newRecord['date'].substr(4,11).trim();
                     }
                     allRecordsObject[tab].push(newRecord);// alla fine sarà {'COMORBIDITIES':[{...},{...},...],'ASMA':[{...},{...},...], ...}
                 }
