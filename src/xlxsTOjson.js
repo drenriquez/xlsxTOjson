@@ -173,6 +173,7 @@ async function funONEmultiFilesBric(ro) {
 }
 
 async function funONEmultiFilesAmplify (ro){
+    let noduleCount=0;
     let dbMask=maskDB();
     let keyToDelete=deleteKeyInMaskDB();
     let dbMaskNodule=nodulesMaskDB();
@@ -190,6 +191,7 @@ async function funONEmultiFilesAmplify (ro){
                 ListValueFieldsInExls.push(ro[i][j])
             } 
         if (ro[i][0]){       //prima riga di ogni paziente
+            noduleCount=1;
             code_patient=ro[i][0];
             dateTest={'TAC_Basale':ListValueFieldsInExls[128],'1_FUP':ListValueFieldsInExls[200],'2_FUP':ListValueFieldsInExls[215],'3_FUP':ListValueFieldsInExls[230]};
         }
@@ -249,13 +251,20 @@ async function funONEmultiFilesAmplify (ro){
                 if(((tab==='ImagingTest'||tab==='ImagingTestFinding') && (newRecord['date']===null))||(tab==='ImagingTestFinding')&&(newRecord['posProb']===null && newRecord['status']===null)){
                     continue
                 }
-                
+                // if((tab==='ImagingTestFinding')&&(newRecord['noduleCount']===null)){
+                //     noduleCount++;
+                //     newRecord['noduleCount']=noduleCount;
+                //}
                 else{//this function is used to delete the keys of a specific table indicate in deleteKeyInMaskD
                     for (let key in keyToDelete[tab]){
                         delete newRecord[keyToDelete[tab][key]]
                     }
                     if(newRecord['date'] && newRecord['date']!='richiesta esami ematici x mail'){
                         newRecord['date']=newRecord['date'].substr(4,11).trim();
+                    }
+                    if((tab==='ImagingTestFinding')&&(newRecord['noduleCount']===null)){
+                    noduleCount++;
+                    newRecord['noduleCount']=String(noduleCount);
                     }
                     allRecordsObject[tab].push(newRecord);// alla fine sarà {'COMORBIDITIES':[{...},{...},...],'ASMA':[{...},{...},...], ...}
                 }
