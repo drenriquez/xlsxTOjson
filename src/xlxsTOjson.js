@@ -246,7 +246,7 @@ async function funONEmultiFilesAmplify (ro){
                     }
                 }
                 //the following code ensures that undated ImagingTests are not logged
-                if((tab==='ImagingTest'||tab==='ImagingTestFinding') && (newRecord['date']===null)){
+                if(((tab==='ImagingTest'||tab==='ImagingTestFinding') && (newRecord['date']===null))||(tab==='ImagingTestFinding')&&(newRecord['posProb']===null && newRecord['status']===null)){
                     continue
                 }
                 
