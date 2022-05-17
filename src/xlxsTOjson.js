@@ -180,8 +180,8 @@ async function funONEmultiFilesAmplify (ro){
     let allRecordsObject={}; //conterrà oggetti js per ogni tavola in dbMask,ed ogni lista ogetti records
     allRecordsObject['Nodules']=[];
     let code_patient=null;
-    for(let tab in dbMask){//mask è un oggetto contenente oggetti,tab è una stringa, che sarà 'COMORBIDITIES','ASMA' ecc
-        allRecordsObject[tab]=[]//sarà un oggetto contenente liste , cioè {'COMORBIDITIES':[],'ASMA':[], ...}
+    for(let tab in dbMask){//mask è un oggetto contenente oggetti,tab è una stringa, che sarà 'COMORBIDITIES','ANAMNESI' ecc
+        allRecordsObject[tab]=[]//sarà un oggetto contenente liste , cioè {'COMORBIDITIES':[],'ANAMNESI':[], ...}
     }
     let dateTest={};
     for (let i=1;i<ro.length;++i){
@@ -224,6 +224,24 @@ async function funONEmultiFilesAmplify (ro){
                 let newRecord={};
                 for(let w=0;w <numberOfFieldPerRecord-1;++w ){
                     if (w===0){newRecord[dbMask[tab]['FIELDS'][w]]=y}
+
+                    else if((typeof dbMask[tab][y][w-1]==='object')&&(dbMask[tab][y][w-1]!==null)){
+                        let record='';
+                        let separator='';
+                        for(let k of dbMask[tab][y][w-1]){                       
+                            if(record!==''){
+                                separator='-'
+                            }
+
+                            if(ListValueFieldsInExls[k]===undefined ||ListValueFieldsInExls[k]===null){
+                              continue
+                            }
+                            else{
+                                record=record+separator+ListValueFieldsInExls[k].toString()
+                            }
+                        }
+                        newRecord[dbMask[tab]['FIELDS'][w]]=record
+                    }
                     else{
                         if(dbMask[tab][y][w-1]===null){
                             newRecord[dbMask[tab]['FIELDS'][w]]=null
@@ -261,6 +279,9 @@ async function funONEmultiFilesAmplify (ro){
                     }
                     if(newRecord['date'] && newRecord['date']!='richiesta esami ematici x mail'){
                         newRecord['date']=newRecord['date'].substr(4,11).trim();
+                    }
+                    if(newRecord['period']){
+                        newRecord['period']=newRecord['period'].substr(4,11).trim();
                     }
                     if((tab==='ImagingTestFinding')&&(newRecord['noduleCount']===null)){
                     noduleCount++;

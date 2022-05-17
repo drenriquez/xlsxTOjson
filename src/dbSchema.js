@@ -17,6 +17,24 @@ function maskDB(){
         //     'FIELDS':['TYPE','FIRST','SECOND','patientID'],
         //     'DATA_FILE':[7,8],
         // },
+        'Patient':{
+            'FIELDS':['centerID','code','biobankCode'],
+            'c0cfb71a-5e80-474a-a7ba-9335b385e54e':[0,1],
+        },
+        'Anagraphic':{
+            'FIELDS':['type','value','patientID'],
+            'SESSO':[149],
+            'PESO':[158],
+            'ALTEZZA':[157],
+            'ANNI COMPIUTI':[154],
+            'ETNIA':[18],
+            'GRADO DI ISTRUZIONE':[19],
+            'OCCUPAZIONE':[17],
+            'FUMATORE?':[162],
+            'SIGARETTE AL GIORNO':[163],
+            'ANNI DA FUMATORE':[164],
+            'DA QUANTI ANNI HA SMESSO DI FUMARE':[165],
+        },
         'Comorbidities':{
             'FIELDS':['type','value','patientID'],
             'ASMA':[23],
@@ -54,7 +72,13 @@ function maskDB(){
             'CONSUMO GIORNALIERO DI ALCOL':[93,null,null,null],
             'AUTOVALUTAZIONE STATO DI SALUTE':[94,null,null,null],
             'STATO DI SALUTE GENERALE CHE LIMITA LO SVOLGIMENTO DI ATTIVITÀ MODERATE':[95,null,null,null],
-            'STATO DI SALUTE GENERALE CHE LIMITA LO SVOLGIMENTO DI ATTIVITÀ IMPEGNATIVE':[96,null,null,null]
+            'STATO DI SALUTE GENERALE CHE LIMITA LO SVOLGIMENTO DI ATTIVITÀ IMPEGNATIVE':[96,null,null,null],
+            'SGRY':[[250,251],248,null,[249,252]],
+            'HISTOLOGICAL':[252,248,null,[253,254,255,256]],
+            "Stadio_sec_T_8th":[253,248,null,null],
+            "Stadio_sec_N_8th":[254,248,null,null],
+            "Stadio_sec_M_8th":[255,248,null,null],
+            "Stadio_sec_Masaoka_Koga":[256,248,null,null],
         },
 
         'AnamnesiFamily':{
@@ -116,7 +140,7 @@ function maskDB(){
             "Rischio alle SUCCESSIVE":[198,128,null],
             "PET_RESULT":[245,244,null],
             "BIO_RESULT":[247,246,null],
-            "SGRY_DATE":[null,248,null],
+           // "SGRY_DATE":[null,248,null],
         },
         'ImagingTest':{
             'FIELDS':['Description','date','patientID'],
