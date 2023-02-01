@@ -18,8 +18,8 @@ function maskDB(){
         //     'DATA_FILE':[7,8],
         // },
         'Patient':{
-            'FIELDS':['centerID','code','biobankCode'],
-            'c0cfb71a-5e80-474a-a7ba-9335b385e54e':[0,1],
+            'FIELDS':['centerID','biobankCode','pid','code'],
+            'dd74ba73-8a99-41dd-8974-0a6912d3591a':[1,5],
         },
         'Anagraphic':{
             'FIELDS':['type','value','patientID'],
@@ -143,11 +143,11 @@ function maskDB(){
            // "SGRY_DATE":[null,248,null],
         },
         'ImagingTest':{
-            'FIELDS':['Description','date','patientID'],
-            'TAC_Basale':[128],
-            '1 FUP':[200],
-            '2 FUP':[215],
-            '3 FUP':[230],
+            'FIELDS':['Description','date','anoncode','patientID'],
+            'TAC_Basale':[128,257],
+            '1 FUP':[200,258],
+            '2 FUP':[215,259],
+            '3 FUP':[230,260],
         },
         'ImagingTestFinding':{
             'FIELDS':['info','date','noduleCount','posProb','LongAxis','ShortAxis','MaxDiam','VolTot','consistenzaNodulo','bordiReg','CalcificazioneBenign','FormaSpiculata','noduloVistoInSerie','noduloVistoInImmagine','VDT','status','change','imagingTestID'],
