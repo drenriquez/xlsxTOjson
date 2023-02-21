@@ -187,13 +187,13 @@ async function funONEmultiFilesAmplify (ro){
     for (let i=1;i<ro.length;++i){
         let newNodule={};
         let ListValueFieldsInExls=[];
-            for (let j=0;j<270;++j){
+            for (let j=0;j<300;++j){
                 ListValueFieldsInExls.push(ro[i][j])
             } 
         if (ro[i][0]){       //prima riga di ogni paziente
             noduleCount=1;
             code_patient=ro[i][0];
-            dateTest={'TAC_Basale':ListValueFieldsInExls[128],'1_FUP':ListValueFieldsInExls[200],'2_FUP':ListValueFieldsInExls[215],'3_FUP':ListValueFieldsInExls[230]};
+            dateTest={'TAC_Basale':ListValueFieldsInExls[128],'1_FUP':ListValueFieldsInExls[203],'2_FUP':ListValueFieldsInExls[220],'3_FUP':ListValueFieldsInExls[237],'4_FUP':ListValueFieldsInExls[254],'5_FUP':ListValueFieldsInExls[271]};
         }
         for(let tab in dbMask){ //questo scorre tra : COMORBIDITIES, ANAMNESIS, ECC
             if(ro[i][0]===null && tab!='ImagingTestFinding'){
